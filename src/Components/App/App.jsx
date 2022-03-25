@@ -1,4 +1,4 @@
-import Filmes from "../Home/Home"
+import Home from "../Home/Home"
 
 
 import "./reset.css"
@@ -10,7 +10,7 @@ export default function App(){
             <header>
                 <h1>CINEFLEX</h1>
             </header>
-            <Filmes />
+            <Home />
         </>
         
     )
