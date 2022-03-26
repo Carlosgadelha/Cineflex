@@ -1,7 +1,6 @@
-// import "./style.css"
-
 import axios from "axios";
 import {useEffect, useState} from "react";
+import {Link} from "react-router-dom"
 import styled from "styled-components";
 
 export default function Home(){
@@ -20,19 +19,24 @@ export default function Home(){
 
     return(
         <div className="home">
+            
             <Titulo>Selecione o filme</Titulo>
             <Filmes>
-                {filmes.map( filme => <Filme imagem={filme.posterURL} key={filme.id}/>)}      
+                {filmes.map( filme => <Filme imagem={filme.posterURL} id={filme.id} key={filme.id}/>)}      
             </Filmes>
         </div> 
         
     )
 
     function Filme(props){
+        
         return(
-            <Borda>
-                <Imagem src={props.imagem}/>
-            </Borda>
+            <Link to={`/sessoes/${props.id}`}>
+                <Borda>
+                     <Imagem src={props.imagem}/>
+                </Borda>
+            </Link>
+            
         )
     }
 }
