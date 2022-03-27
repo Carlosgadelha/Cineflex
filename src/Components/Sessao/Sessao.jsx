@@ -4,6 +4,7 @@ import {Link} from "react-router-dom"
 import styled from "styled-components";
 import { useParams } from 'react-router-dom';
 
+import Footer from "../Footer/Footer"
 
 export default function Home(){
 
@@ -27,8 +28,8 @@ export default function Home(){
         axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`)
         .then(response =>{
              setAssentos(response.data.seats);
-             console.log(response.data)
-             setInfos({titulo:response.data.movie.title})
+             console.log(response.data.movie.title)
+             setInfos({'titulo':response.data.movie.title, 'imagem':response.data.movie.posterURL, 'sessao':`${response.data.day.weekday} - ${response.data.name}`})
         })
         .catch(err => console.log(err))
  
@@ -67,7 +68,8 @@ export default function Home(){
                 <h1>CPF do comprador:</h1>
                 <input placeholder="Digite seu CPF..."></input>
             </Cliente>
-            <button>Reservar assento(s)</button>
+            <button >Reservar assento(s)</button>
+            <Footer titulo={infos.titulo} imagem ={infos.imagem} sessao ={infos.sessao}/>
 
         </Container>
        
@@ -83,7 +85,7 @@ const Container = styled.div`
     button {
         width: 225px;
         height: 42px;
-        margin-top: 47px;
+        margin-top: 57px;
         background: #E8833A;
         border-style: none;
         border-radius: 3px;
@@ -172,7 +174,7 @@ const Item = styled.div`
 
 const Cliente = styled.div`
     width: 327px;
-    margin-top: 44px;
+    margin-top: 40px;
 
     h1{
         text-align: left;

@@ -4,11 +4,12 @@ export default function Footer(props){
     return(
         <Container>
             <Borda>
-                <Imagem src={props.imagem}/>
+                <img src={props.imagem}/>
             </Borda>
-            <Titulo> 
-                {props.titulo}
-            </Titulo>
+            <div> 
+                <p>{props.titulo}</p>
+                <p>{props.sessao} </p>
+            </div>
         </Container>
     )
 }
@@ -23,18 +24,20 @@ const Container = styled.div`
     bottom: 0px;
     background: #DFE6ED;
     border: 1px solid #9EADBA;
+
+    p{
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 26px;
+        line-height: 30px;
+        display: flex;
+        margin-left: 14px;
+        align-items: center;
+        color: #293845;
+    }
 `
-const Titulo = styled.div`
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 26px;
-    line-height: 30px;
-    display: flex;
-    margin-left: 14px;
-    align-items: center;
-    color: #293845;
-`
+
 const Borda = styled.div`
     width: 64px;
     height: 89px;
@@ -45,9 +48,9 @@ const Borda = styled.div`
     background: #FFFFFF;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 2px;
-`
 
-const Imagem = styled.img`
-    width: 48px;
-    height: 72px;
+    img{
+        width: 48px;
+        height: 72px;
+    }
 `
