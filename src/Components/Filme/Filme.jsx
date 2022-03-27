@@ -1,7 +1,7 @@
 import axios from "axios";
 import {useEffect, useState} from "react";
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import Footer from '../Footer/Footer'
 
 export default function Sessoes(){
@@ -21,8 +21,6 @@ export default function Sessoes(){
 
     },[])
 
-    console.log(infos)
-
     return(
         <Container>
             <Titulo>Selecione o horário</Titulo>
@@ -38,7 +36,11 @@ function Sessao(props){
         <Data>
            <Dia>{props.dia} - {props.data}</Dia>
            <Horarios>
-               {props.horarios.map(horario => <Horario key={horario.id}>{horario.name} </Horario> )}
+                {props.horarios.map(horario => 
+                   <Link to={`/assentos/${horario.id}`} style={{textDecoration: 'none'}}>
+                       <Horario key={horario.id} >{horario.name} </Horario>
+                   </Link> 
+                )}
            </Horarios>
         </Data>
     )
