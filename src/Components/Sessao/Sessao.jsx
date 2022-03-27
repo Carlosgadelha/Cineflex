@@ -9,6 +9,7 @@ export default function Home(){
 
     const [assentos, setAssentos] = useState([]);
     const [infos, setInfos] = useState({});
+    const [selecionado, setSelecionado] = useState([]);
     const {idSessao} = useParams();
     const tipos =   [{
                         'tipo':'',
@@ -33,13 +34,24 @@ export default function Home(){
  
      },[])
 
-     
+     function VerificarDisponibilidade(ocupado,index){
+         if(ocupado){
+             alert("assento não está disponível")
+         }else{
+            if(selecionado.includes(index)){
+               selecionado.splice(selecionado.indexOf(index),1)
+               setSelecionado([...selecionado])
+            }else setSelecionado([...selecionado,index]);
+         }
+         
+     }
 
     return(
         <Container>  
             <Titulo>Selecione o(s) assento(s)</Titulo>
             <Assentos>
-                {assentos.map( (assento, index) => (index < 9)? <Assento ocupado ={assento.isAvailable}>{`0${assento.name}`}</Assento>: <Assento>{assento.name}</Assento>)}
+                {assentos.map( (assento, index) => 
+                (index < 9)? <Assento ocupado ={selecionado.includes(index)? "":assento.isAvailable} onClick={()=> VerificarDisponibilidade(assento.isAvailable,index)}>{`0${assento.name}`}</Assento>: <Assento ocupado ={selecionado.includes(index)? "":assento.isAvailable} onClick={()=> VerificarDisponibilidade(assento.isAvailable,index)}>{assento.name}</Assento>)}
             </Assentos>
             <Legenda>
                 {tipos.map(item => 
@@ -49,6 +61,14 @@ export default function Home(){
                     </Opcao>
                )}
             </Legenda>
+            <Cliente>
+                <h1>Nome do comprador:</h1>
+                <input placeholder="Digite seu nome..."></input>
+                <h1>CPF do comprador:</h1>
+                <input placeholder="Digite seu CPF..."></input>
+            </Cliente>
+            <button>Reservar assento(s)</button>
+
         </Container>
        
     )
@@ -59,6 +79,22 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    button {
+        width: 225px;
+        height: 42px;
+        margin-top: 47px;
+        background: #E8833A;
+        border-style: none;
+        border-radius: 3px;
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 21px;
+        letter-spacing: 0.04em;
+        color: #FFFFFF;
+    }
 `
 
 const Assentos = styled.div`
@@ -76,7 +112,7 @@ const Assento = styled.div`
     margin-bottom: 18px;
     width: 26px;
     height: 26px;
-    background: ${props => props.ocupado?'#FBE192':'#C3CFD9'};
+    background: ${props => props.ocupado?'#FBE192':(props.ocupado === false )?'#C3CFD9':'#8DD7CF'};
     border: ${props => props.ocupado?'1px solid #F7C52B':'1px solid #808F9D;'};
     box-sizing: border-box;
     border-radius: 12px;
@@ -117,7 +153,7 @@ const Opcao = styled.div`
         font-family: 'Roboto';
         font-style: normal;
         font-weight: 400;
-        font-size: 17px;
+        font-size: 14px;
         line-height: 15px;
         margin-top:7px;
         letter-spacing: -0.013em;
@@ -132,4 +168,38 @@ const Item = styled.div`
     border: ${props => (props.tipo === 'indisponivel')?'1px solid #F7C52B':(props.tipo === 'Disponivel')?'1px solid #7B8B99':'1px solid #1AAE9E'};
     box-sizing: border-box;
     border-radius: 17px;
+`
+
+const Cliente = styled.div`
+    width: 327px;
+    margin-top: 44px;
+
+    h1{
+        text-align: left;
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 21px;
+        color: #293845;
+
+        &:nth-of-type(2n){ margin-top: 7px}
+    }
+
+    input{
+        width: 100%;
+        height: 51px;
+        background: #FFFFFF;
+        border: 1px solid #D5D5D5;
+        box-sizing: border-box;
+        border-radius: 3px;
+        font-family: 'Roboto';
+        font-style: italic;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 21px;
+        text-indent: 18px;
+        align-items: center;
+        color: #AFAFAF;
+    }
 `
