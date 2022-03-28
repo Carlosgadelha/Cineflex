@@ -132,6 +132,7 @@ const Container = styled.div`
         font-size: 18px;
         line-height: 21px;
         letter-spacing: 0.04em;
+        margin-bottom: 147px;
         color: #FFFFFF;
     }
 `
