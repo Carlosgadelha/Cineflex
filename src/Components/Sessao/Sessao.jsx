@@ -1,17 +1,24 @@
 import axios from "axios";
 import {useEffect, useState} from "react";
-import {Link} from "react-router-dom"
 import styled from "styled-components";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import Footer from "../Footer/Footer"
+import Titulo from "../Titulo/Titulo"
 
 export default function Home(){
 
     const [assentos, setAssentos] = useState([]);
     const [infos, setInfos] = useState({});
     const [selecionado, setSelecionado] = useState([]);
+    const [ids, setIds] = useState([]);
+    const [comprador, setComprador] = useState("");
+    const [CPF, setCPF] = useState("");
+
+
     const {idSessao} = useParams();
+    const navigate = useNavigate();
+
     const tipos =   [{
                         'tipo':'',
                         'nome':'Selecionado'
@@ -28,23 +35,53 @@ export default function Home(){
         axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`)
         .then(response =>{
              setAssentos(response.data.seats);
-             console.log(response.data.movie.title)
-             setInfos({'titulo':response.data.movie.title, 'imagem':response.data.movie.posterURL, 'sessao':`${response.data.day.weekday} - ${response.data.name}`})
+             setInfos({'titulo':response.data.movie.title, 'imagem':response.data.movie.posterURL, 'sessao':`${response.data.day.weekday} - ${response.data.name}`, 'data':`${response.data.day.date} ${response.data.name}`})
         })
         .catch(err => console.log(err))
  
      },[])
 
-     function VerificarDisponibilidade(ocupado,index){
-         if(ocupado){
+     function verificarDisponibilidade(ocupado,index,id){
+         if(!ocupado){
              alert("assento não está disponível")
          }else{
             if(selecionado.includes(index)){
                selecionado.splice(selecionado.indexOf(index),1)
                setSelecionado([...selecionado])
-            }else setSelecionado([...selecionado,index]);
+
+               ids.splice(ids.indexOf(id),1)
+               setIds([...ids])
+            }else {
+                setSelecionado([...selecionado,index])
+                setIds([...ids,id])
+
+            }
          }
          
+     }
+
+     function comprar(){
+
+
+        axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many",{
+
+                ids: ids,
+                name: comprador,
+                cpf: CPF
+        })
+        .then(response =>{
+
+            navigate('/assentos/sucesso', { 
+                                            state: { 
+                                                        titulo: infos.titulo, 
+                                                        data: infos.data, 
+                                                        assentos: [...selecionado], 
+                                                        comprador: comprador, 
+                                                        CPF: CPF 
+                                                    }
+                                          })
+        })
+
      }
 
     return(
@@ -52,7 +89,7 @@ export default function Home(){
             <Titulo>Selecione o(s) assento(s)</Titulo>
             <Assentos>
                 {assentos.map( (assento, index) => 
-                (index < 9)? <Assento ocupado ={selecionado.includes(index)? "":assento.isAvailable} onClick={()=> VerificarDisponibilidade(assento.isAvailable,index)}>{`0${assento.name}`}</Assento>: <Assento ocupado ={selecionado.includes(index)? "":assento.isAvailable} onClick={()=> VerificarDisponibilidade(assento.isAvailable,index)}>{assento.name}</Assento>)}
+                (index < 9)? <Assento ocupado ={selecionado.includes(index)? "":!assento.isAvailable} onClick={()=> verificarDisponibilidade(assento.isAvailable,index,assento.id)}>{`0${assento.name}`}</Assento>: <Assento ocupado ={selecionado.includes(index)? "":!assento.isAvailable} onClick={()=> verificarDisponibilidade(assento.isAvailable,index,assento.id)}>{assento.name}</Assento>)}
             </Assentos>
             <Legenda>
                 {tipos.map(item => 
@@ -64,11 +101,11 @@ export default function Home(){
             </Legenda>
             <Cliente>
                 <h1>Nome do comprador:</h1>
-                <input placeholder="Digite seu nome..."></input>
+                <input placeholder="Digite seu nome..."  onChange={e => setComprador(e.target.value)}></input>
                 <h1>CPF do comprador:</h1>
-                <input placeholder="Digite seu CPF..."></input>
+                <input placeholder="Digite seu CPF..." onChange={e => setCPF(e.target.value)}></input>
             </Cliente>
-            <button >Reservar assento(s)</button>
+            <button  onClick ={()=> comprar()}>Reservar assento(s)</button>
             <Footer titulo={infos.titulo} imagem ={infos.imagem} sessao ={infos.sessao}/>
 
         </Container>
@@ -132,19 +169,6 @@ const Legenda = styled.div`
     width: 323px;
     display: flex;
     justify-content: space-around;
-`
-const Titulo = styled.h1`
-    width: 100%;
-    height: 110px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 400;
-    font-size: 24px;
-    line-height: 28px;
-    letter-spacing: 0.04em;
-    color: #293845;
-
 `
 const Opcao = styled.div`
     display: flex;

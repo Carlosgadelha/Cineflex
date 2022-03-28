@@ -3,6 +3,8 @@ import {useEffect, useState} from "react";
 import {Link} from "react-router-dom"
 import styled from "styled-components";
 
+import Titulo from "../Titulo/Titulo"
+
 export default function Home(){
 
     const [filmes, setFilmes] = useState([])
@@ -40,20 +42,6 @@ export default function Home(){
         )
     }
 }
-
-const Titulo = styled.h1`
-    width: 100%;
-    height: 110px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 400;
-    font-size: 24px;
-    line-height: 28px;
-    letter-spacing: 0.04em;
-    color: #293845;
-
-`
 
 const Filmes = styled.div`
     width: 100%;

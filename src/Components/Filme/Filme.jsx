@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import styled from 'styled-components';
 import { useParams, Link } from 'react-router-dom';
 import Footer from '../Footer/Footer'
+import Titulo from "../Titulo/Titulo";
 
 export default function Sessoes(){
 
@@ -52,22 +53,8 @@ const Container = styled.div`
 const Data = styled.div`
     margin-bottom: 23px;
 `
-const Titulo = styled.h1`
-    width: 100%;
-    height: 110px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 400;
-    font-size: 24px;
-    line-height: 28px;
-    letter-spacing: 0.04em;
-    color: #293845;
-
-`
-
 const Dia = styled.div`
-    width: 241px;
+    width: 280px;
     height: 35px;
     font-family: 'Roboto';
     font-style: normal;
